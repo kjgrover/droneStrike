@@ -1,7 +1,6 @@
 # Drone Strike
 
-This application takes two dates inputed from the user and uses a public drone strike api and a geocoding api to display the drone strikes 
-on google maps. This application also creates a chart using the D3.js library Plotly.
+This application takes two dates inputed from the user and uses a public drone strike api and a geocoding api to display the drone strike between those two dates on google maps. This application also creates a chart using the D3.js library Plotly.
 
 ## Made With
 
