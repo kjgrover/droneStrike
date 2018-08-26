@@ -1,5 +1,5 @@
-// clear data in modal with clear button
-$("#clear").on('click', function(){
+ // clear data in modal with clear button
+ $("#clear").on('click', function(){
     $("#modal-info").clear();
 });
 
@@ -52,7 +52,7 @@ function geoToo(x, state, func){
 }
 
 //This is the drone strike API
-var queryURL =  "api.dronestre.am/data "
+var queryURL =  "api.dronestre.am/data"
 
 //these are empty arrays awaiting data to be pushed by the API
     var locations = [];
@@ -65,6 +65,8 @@ var queryURL =  "api.dronestre.am/data "
     var latArray = [];
     var number = [];
     var injury = [];
+    var children = [];
+    var civilians = [];
 
     var trace = {
         x: [],
@@ -83,10 +85,23 @@ var queryURL =  "api.dronestre.am/data "
 
     $("#add-data").on("click", function(event) {
 
-    $("#loading").prepend("<img id='loader' src='assets/media/loader-bar.gif' />");
+    $("#loading").prepend("<img id='loader' src='/public/Images/loader-bar.gif' />");
         
     lonArray = [];
     latArray = [];
+    locations = [];
+    places = [];
+    country = [];
+    narrative = [];
+    killed = [];
+    link = [];
+    number = [];
+    injury = [];
+    trace.x = [];
+    trace.y = [];
+    trace.text = [];
+    children = [];
+    civilians = [];
     event.preventDefault();
 
 //This is cleaning up the user inputed dates so that it can be used to query dronestr.am
@@ -99,7 +114,7 @@ var queryURL =  "api.dronestre.am/data "
 
     $.ajax({
     method: "GET",
-    url: "https://cors-anywhere.herokuapp.com/https://api.dronestre.am/data",
+    url: "https://cors-anywhere.herokuapp.com/http://api.dronestre.am/data",
     }).then(function(data) {
         console.log(data);
 
@@ -124,6 +139,8 @@ var queryURL =  "api.dronestre.am/data "
         var droneNumber = parseInt(data.strike[n].number)
         var droneDate = data.strike[n].date;
         var droneInjury = data.strike[n].injuries;
+        var droneChildren = data.strike[n].children;
+        var droneCivilian = data.strike[n].civilians;
 
         //this if statement finds data between the two inputed dates and pushes the selected data to the empty arrays made above
         if (dateSliceToo>=userBegin && dateSliceToo<=userEnd) {
@@ -140,7 +157,10 @@ var queryURL =  "api.dronestre.am/data "
             injury.push([droneInjury])
             trace.x.push(droneDate);
             trace.y.push(droneDeath);
-            trace.text.push(droneCountry)
+            trace.text.push(droneCountry);
+            children.push(droneChildren);
+            civilians.push(droneCivilian);
+            
 
         }
     } 
@@ -215,9 +235,20 @@ var queryURL =  "api.dronestre.am/data "
         console.log("this is number of bombs "+number)
         console.log("this is the number killed "+killed)
     
-
+    var layout = {
+        title: 'Deaths Versus Time',
+        xaxis: {
+        title: 'Date',
+        showgrid: false,
+        zeroline: false
+        },
+        yaxis: {
+        title: 'Number of Deaths',
+        showline: false
+        }
+    };
     var data = [trace];
-    Plotly.newPlot('myDiv', data);
+    Plotly.newPlot('myDiv', data, layout);
 
         //starts auto zoom
         bounds  = new google.maps.LatLngBounds();
